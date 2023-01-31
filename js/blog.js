@@ -61,7 +61,7 @@ function showData() {
   for (let blog of blogs) {
     document.getElementById("containers-project").innerHTML += `
     <div id="container-project">
-      <img src="${blog.Image}" />
+      <img src="${blog.image}" />
       <a href="#"><h3>${blog.title}</h3></a>
 
       <p>
