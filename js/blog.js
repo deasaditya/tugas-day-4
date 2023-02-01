@@ -14,7 +14,7 @@ function getData(e) {
     let reactjs = document.getElementById("react-js").checked ? document.getElementById("react-js").value : false;
     let nextjs = document.getElementById("next-js").checked ? document.getElementById("next-js").value : false;
     let typescript = document.getElementById("type-script").checked ? document.getElementById("type-script").value : false;
-    let image = document.getElementById("input-file-image").files;
+    let image = document.getElementById("image").files;
 
     if (title == "") 
   alert("harap isi nama");
@@ -43,9 +43,9 @@ function getData(e) {
         reactjs,
         nextjs,
         typescript,
-        image        
-        
-        
+        image,
+        author: "Deas Aditya",
+        postedAt: new Date()    
     };
     blogs.push(dataBlog);
     // console.log(blogs);
@@ -61,9 +61,10 @@ function showData() {
   for (let blog of blogs) {
     document.getElementById("containers-project").innerHTML += `
     <div id="container-project">
-      <img src="${blog.image}" />
-      <a href="#"><h3>${blog.title}</h3></a>
-
+      <img src="${blog.image}"/>
+      <a href="detail.html"><h3>${blog.title}</h3></a>
+      <div class="durasi">
+      ${createTime(blog.postedAt)} | ${blog.author}</div>
       <p>
         ${blog.content}
       </p>
@@ -77,8 +78,68 @@ function showData() {
         <button>edit</button>
         <button>delete</button>
       </div>
+      <div style="float:right; margin: 10px">
+                <p style="font-size: 15px; color:grey">${getDuration(blog.postedAt)}</p>
+            </div>
     </div>
     `;
   }
 }
 
+
+// function manipulation date tine
+function createTime(time){
+    // declaration variable
+    let years = time.getFullYear()
+    let monthIndex = time.getMonth()
+    let date = time.getDate()
+    let hour = time.getHours()
+    let minutes = time.getMinutes()
+    
+    const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+    return `${date} ${month[monthIndex]} ${years} ${hour}:${minutes} WIB`
+}
+
+
+// manipulation duration time
+const getDuration = (timePost) => {
+    let timePosting = timePost
+    let timeNow = new Date()
+    let distance = timeNow - timePosting
+
+    // 1 sec = 1000 milisecond
+    // 30*24*60*60*1000
+
+    let monthDistance = Math.floor(distance / (30*24*60*60*1000))
+    if(monthDistance > 0) {
+        return monthDistance + ' month ago'
+    } else {
+        let weekDistance = Math.floor(distance / (7*24*60*60*1000))
+        if(weekDistance > 0) {
+            return weekDistance + ' week ago'
+        } else {
+            let dayDistance = Math.floor(distance / (24*60*60*1000))
+            if(dayDistance > 0) {
+                return dayDistance + "Day ago"
+            } else {
+                let hourDistance = Math.floor(distance / (60*60*1000))
+                if(hourDistance > 0) {
+                    return hourDistance + "Hour ago"
+                } else {
+                    let minutesDistance = Math.floor(distance / (60*1000))
+                    if(minutesDistance > 0) {
+                        return minutesDistance + "Minute ago"
+                    } else {
+                        let secondDistance = Math.floor(distance / 1000)
+                        if (secondDistance > 0) {
+                            return secondDistance + "second ago"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+setInterval(showData, 1000)
